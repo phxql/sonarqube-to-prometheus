@@ -29,10 +29,10 @@ public class ServerHandler extends AbstractHandler {
 
   private void handleMetrics(HttpServletResponse response) throws IOException {
     response.setStatus(200);
+    // See https://prometheus.io/docs/instrumenting/exposition_formats/#text-based-format
     response.setHeader("Content-Type", "text/plain; version=0.0.4");
 
     try (OutputStreamWriter writer = new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8)) {
-      // See https://prometheus.io/docs/instrumenting/exposition_formats/#text-based-format
       meterRegistry.scrape(writer);
     }
   }
