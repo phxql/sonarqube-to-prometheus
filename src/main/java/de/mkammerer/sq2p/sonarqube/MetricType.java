@@ -122,7 +122,7 @@ public enum MetricType {
 
       JsonNode periodNode = node.get("period");
       if (periodNode != null) {
-        return periodNode.get("value").asText();
+        return periodNode.get("value").textValue();
       }
 
       throw new IllegalArgumentException(String.format("No value found in node '%s'", node));
