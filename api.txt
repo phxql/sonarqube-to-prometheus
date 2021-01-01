@@ -1,0 +1,136 @@
+export TOKEN=3c877121f457abb0b9b8d3f57a8aca602b6d78aa
+
+curlie -u "$TOKEN": ":9000/api/components/search?qualifiers=TRK&ps=500"
+
+{
+    "paging": {
+        "pageIndex": 1,
+        "pageSize": 100,
+        "total": 1
+    },
+    "components": [
+        {
+            "organization": "default-organization",
+            "key": "de.mkammerer.sonarqube-to-prometheus:sonarqube-to-prometheus",
+            "name": "sonarqube-to-prometheus",
+            "qualifier": "TRK",
+            "project": "de.mkammerer.sonarqube-to-prometheus:sonarqube-to-prometheus"
+        }
+    ]
+}
+
+
+curlie -u "$TOKEN": ":9000/api/metrics/types"
+
+{
+    "types": [
+        "INT",
+        "FLOAT",
+        "PERCENT",
+        "BOOL",
+        "STRING",
+        "MILLISEC",
+        "DATA",
+        "LEVEL",
+        "DISTRIB",
+        "RATING",
+        "WORK_DUR"
+    ]
+}
+
+curlie -u "$TOKEN": ":9000/api/metrics/search?ps=500"
+
+{
+    "metrics": [
+        {
+            "id": "AXa50kOQy1L5GuZ0wnn4",
+            "key": "new_technical_debt",
+            "type": "WORK_DUR",
+            "name": "Added Technical Debt",
+            "description": "Added technical debt",
+            "domain": "Maintainability",
+            "direction": -1,
+            "qualitative": true,
+            "hidden": false,
+            "custom": false
+        },
+        {
+            "id": "AXa50kOMy1L5GuZ0wnnf",
+            "key": "blocker_violations",
+            "type": "INT",
+            "name": "Blocker Issues",
+            "description": "Blocker issues",
+            "domain": "Issues",
+            "direction": -1,
+            "qualitative": true,
+            "hidden": false,
+            "custom": false
+        },
+...
+
+curlie -u "$TOKEN": ":9000/api/project_branches/list?project=de.mkammerer.sonarqube-to-prometheus:sonarqube-to-prometheus"
+
+{
+    "branches": [
+        {
+            "name": "master",
+            "isMain": true,
+            "type": "BRANCH",
+            "status": {
+                "qualityGateStatus": "OK"
+            },
+            "analysisDate": "2020-12-31T18:27:12+0100",
+            "excludedFromPurge": true
+        }
+    ]
+}
+
+curlie -u "$TOKEN": ":9000/api/measures/component?component=de.mkammerer.sonarqube-to-prometheus:sonarqube-to-prometheus&metricKeys=blocker_violations,new_technical_debt"
+
+{
+    "component": {
+        "id": "AXa51qT3y1L5GuZ0wscm",
+        "key": "de.mkammerer.sonarqube-to-prometheus:sonarqube-to-prometheus",
+        "name": "sonarqube-to-prometheus",
+        "qualifier": "TRK",
+        "measures": [
+            {
+                "metric": "blocker_violations",
+                "value": "0",
+                "bestValue": true
+            },
+            {
+                "metric": "new_technical_debt",
+                "periods": [
+                    {
+                        "index": 1,
+                        "value": "0",
+                        "bestValue": true
+                    }
+                ],
+                "period": {
+                    "index": 1,
+                    "value": "0",
+                    "bestValue": true
+                }
+            }
+        ]
+    }
+}
+
+curlie -u "$TOKEN": ":9000/api/project_branches/list?project=de.mkammerer.sonarqube-to-prometheus:sonarqube-to-prometheus"
+
+{
+    "branches": [
+        {
+            "name": "master",
+            "isMain": true,
+            "type": "BRANCH",
+            "status": {
+                "qualityGateStatus": "OK"
+            },
+            "analysisDate": "2020-12-31T18:27:12+0100",
+            "excludedFromPurge": true
+        }
+    ]
+}
