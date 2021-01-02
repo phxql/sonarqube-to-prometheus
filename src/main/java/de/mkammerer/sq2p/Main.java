@@ -19,10 +19,11 @@ import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -84,8 +85,12 @@ public class Main {
     String hostname = config.getServer().getHostname();
     int port = config.getServer().getPort();
     LOGGER.debug("Starting server on {}:{}...", hostname, port);
-    Server server = new Server(new InetSocketAddress(hostname, port));
 
+    Server server = new Server(new QueuedThreadPool(config.getServer().getMaxThreads(), config.getServer().getMinThreads()));
+    ServerConnector connector = new ServerConnector(server);
+    connector.setHost(hostname);
+    connector.setPort(port);
+    server.addConnector(connector);
     server.setHandler(new ServerHandler(config.getPrometheus(), meterRegistry));
 
     server.start();

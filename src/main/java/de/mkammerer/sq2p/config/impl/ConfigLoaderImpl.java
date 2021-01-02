@@ -20,7 +20,7 @@ public class ConfigLoaderImpl implements ConfigLoader {
     }
 
     return new Config(
-      new Config.Server(config.getString("server.hostname", "0.0.0.0"), Math.toIntExact(config.getLong("server.port", 8080L))),
+      new Config.Server(config.getString("server.hostname", "0.0.0.0"), Math.toIntExact(config.getLong("server.port", 8080L)), Math.toIntExact(config.getLong("server.min_threads", 1L)), Math.toIntExact(config.getLong("server.max_threads", 8L))),
       new Config.SonarQube(URI.create(config.getString("sonarqube.url", "http://localhost:9000/")), sonarQubeToken, Duration.parse(config.getString("sonarqube.scrape_interval", "PT1H"))),
       new Config.Prometheus(config.getString("prometheus.metrics_path", "/metrics"))
     );

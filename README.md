@@ -5,7 +5,7 @@ Exports SonarQube metrics to Prometheus.
 ## Running
 
 ```shell
-java -Xmx128M sonarqube-to-prometheus-*.jar
+java -Xmx128M -jar sonarqube-to-prometheus-*.jar
 ```
 
 To quit, press `Ctrl+C`.
@@ -29,6 +29,8 @@ Most options have sane defaults, but you must set `sonarqube.token`!
 [server]
 hostname = "0.0.0.0" # Address to bind to
 port = 8080 # Port to bind to
+min_threads = 1 # Minimum http threads
+max_threads = 8 # Maximum http threads
 
 [sonarqube]
 url = "http://localhost:9000/" # URL to SonarQube

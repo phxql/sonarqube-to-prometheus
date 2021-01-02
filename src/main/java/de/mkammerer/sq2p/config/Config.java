@@ -24,6 +24,8 @@ public class Config {
   public static class Server {
     String hostname;
     int port;
+    int minThreads;
+    int maxThreads;
   }
 
   @Value
