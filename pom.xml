@@ -43,6 +43,11 @@
     </dependency>
 
     <dependency>
+      <groupId>net.jodah</groupId>
+      <artifactId>expiringmap</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
@@ -83,6 +88,12 @@
         <groupId>io.micrometer</groupId>
         <artifactId>micrometer-registry-prometheus</artifactId>
         <version>1.6.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>net.jodah</groupId>
+        <artifactId>expiringmap</artifactId>
+        <version>0.5.9</version>
       </dependency>
 
       <dependency>

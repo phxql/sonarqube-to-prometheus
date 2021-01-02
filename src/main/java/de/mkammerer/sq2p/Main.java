@@ -52,7 +52,7 @@ public class Main {
     Config config = loadConfig();
     SonarQubeService sonarQube = getSonarQubeService(config);
     PrometheusMeterRegistry meterRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
-    MetricService metricService = getMetricService(meterRegistry);
+    MetricService metricService = getMetricService(meterRegistry, config);
     setupScheduler(executorService, config, sonarQube, metricService);
     startServer(config, meterRegistry);
   }
@@ -63,8 +63,9 @@ public class Main {
     executorService.scheduleWithFixedDelay(scheduler::run, 0, config.getSonarQube().getScrapeInterval().toSeconds(), TimeUnit.SECONDS);
   }
 
-  private MetricService getMetricService(MeterRegistry meterRegistry) {
-    return new MetricServiceImpl(meterRegistry);
+  private MetricService getMetricService(MeterRegistry meterRegistry, Config config) {
+    // Use 3 times the SonarQube scrape interval for metric expiry
+    return new MetricServiceImpl(meterRegistry, config.getSonarQube().getScrapeInterval().multipliedBy(3));
   }
 
   private SonarQubeService getSonarQubeService(Config config) {
