@@ -38,10 +38,10 @@ public class MetricServiceImpl implements MetricService {
 
   @Override
   public void updateMeasure(Measure measure) {
-    AtomicDouble gauge = metrics.computeIfAbsent(MeasureKey.of(measure), key -> {
+    AtomicDouble gauge = metrics.computeIfAbsent(MeasureKey.of(measure), key ->
       // Gets called if the gauge is not already registered
-      return meterRegistry.gauge(key.getMetricId(), key.getTags(), new AtomicDouble(measure.getValue()));
-    });
+      meterRegistry.gauge(key.getMetricId(), key.getTags(), new AtomicDouble(measure.getValue()))
+    );
 
     assert gauge != null; // Can't happen, as our supplier never returns null
     // At this point, the gauge is either a new or an existing one and we can set a value
