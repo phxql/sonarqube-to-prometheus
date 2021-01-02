@@ -2,6 +2,10 @@ package de.mkammerer.sq2p.sonarqube;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum MetricType {
   INT {
     @Override
@@ -86,8 +90,14 @@ public enum MetricType {
     }
   };
 
+  private static final Set<String> VALUES = Stream.of(values()).map(Enum::name).collect(Collectors.toUnmodifiableSet());
+
   public static MetricType parse(String value) {
     return valueOf(value);
+  }
+
+  public static boolean isSupported(String type) {
+    return VALUES.contains(type);
   }
 
   public boolean isSupported() {

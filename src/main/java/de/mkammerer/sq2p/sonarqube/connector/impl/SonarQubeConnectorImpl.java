@@ -6,6 +6,7 @@ import de.mkammerer.sq2p.infrastructure.http.BasicAuth;
 import de.mkammerer.sq2p.infrastructure.http.HttpClient;
 import de.mkammerer.sq2p.sonarqube.Measure;
 import de.mkammerer.sq2p.sonarqube.Metric;
+import de.mkammerer.sq2p.sonarqube.MetricType;
 import de.mkammerer.sq2p.sonarqube.Project;
 import de.mkammerer.sq2p.sonarqube.connector.SonarQubeConnector;
 import de.mkammerer.sq2p.sonarqube.connector.impl.dto.MeasuresDto;
@@ -59,6 +60,7 @@ public class SonarQubeConnectorImpl implements SonarQubeConnector {
 
     return metrics.getMetrics().stream()
       .filter(m -> !m.isHidden())
+      .filter(m -> MetricType.isSupported(m.getType()))
       .map(MetricsDto.MetricDto::toMetric)
       .collect(Collectors.toUnmodifiableSet());
   }
