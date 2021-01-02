@@ -48,6 +48,11 @@
     </dependency>
 
     <dependency>
+      <groupId>com.moandjiezana.toml</groupId>
+      <artifactId>toml4j</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
@@ -94,6 +99,12 @@
         <groupId>net.jodah</groupId>
         <artifactId>expiringmap</artifactId>
         <version>0.5.9</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.moandjiezana.toml</groupId>
+        <artifactId>toml4j</artifactId>
+        <version>0.7.2</version>
       </dependency>
 
       <dependency>

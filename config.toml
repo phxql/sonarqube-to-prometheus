@@ -1,0 +1,11 @@
+[server]
+hostname = "0.0.0.0"
+port = 8080
+
+[sonarqube]
+url = "http://localhost:9000/"
+token = "3c877121f457abb0b9b8d3f57a8aca602b6d78aa"
+scrape_interval = "PT1H"
+
+[prometheus]
+metrics_path = "/metrics"

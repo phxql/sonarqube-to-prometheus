@@ -1,6 +1,7 @@
 package de.mkammerer.sq2p;
 
 import de.mkammerer.sq2p.config.Config;
+import de.mkammerer.sq2p.config.ConfigException;
 import de.mkammerer.sq2p.config.ConfigLoader;
 import de.mkammerer.sq2p.config.impl.ConfigLoaderImpl;
 import de.mkammerer.sq2p.infrastructure.http.HttpClient;
@@ -37,6 +38,9 @@ public class Main {
     ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("scheduler"));
     try {
       new Main().run(args, scheduler);
+    } catch (ConfigException e) {
+      LOGGER.error("Error while loading config: {}", e.getMessage());
+      exitCode = 2;
     } catch (Exception e) {
       LOGGER.error("Unhandled exception, please report this as an issue", e);
       exitCode = 1;
@@ -50,6 +54,8 @@ public class Main {
 
   private void run(String[] args, ScheduledExecutorService executorService) throws Exception {
     Config config = loadConfig();
+    LOGGER.info("Using config: {}", config);
+
     SonarQubeService sonarQube = getSonarQubeService(config);
     PrometheusMeterRegistry meterRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
     MetricService metricService = getMetricService(meterRegistry, config);
@@ -88,13 +94,12 @@ public class Main {
     server.join();
   }
 
-  private Config loadConfig() throws IOException {
+  private Config loadConfig() throws IOException, ConfigException {
     ConfigLoader configLoader = new ConfigLoaderImpl();
 
     Path configFile = Paths.get("config.toml").toAbsolutePath();
     if (!Files.exists(configFile)) {
-      LOGGER.debug("Config file '{}' doesn't exist, using defaults", configFile);
-      return configLoader.getDefaults();
+      throw new ConfigException(String.format("Config file '%s' doesn't exist!", configFile));
     }
 
     LOGGER.debug("Config file '{}' found, loading it", configFile);

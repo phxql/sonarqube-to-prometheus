@@ -1,5 +1,6 @@
 package de.mkammerer.sq2p.config;
 
+import lombok.ToString;
 import lombok.Value;
 
 import java.net.URI;
@@ -14,6 +15,7 @@ public class Config {
   @Value
   public static class SonarQube {
     URI url;
+    @ToString.Exclude
     String token;
     Duration scrapeInterval;
   }
