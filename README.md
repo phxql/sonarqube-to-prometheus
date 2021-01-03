@@ -7,6 +7,9 @@ branches.
 
 ## Running
 
+Download the JAR file from the latest [release](https://github.com/phxql/sonarqube-to-prometheus/releases), install
+a [JVM](https://adoptopenjdk.net/), and run this:
+
 ```shell
 java -XX:+UseSerialGC -Xms16M -Xmx128M -jar sonarqube-to-prometheus-*.jar
 ```
@@ -91,6 +94,13 @@ The metric type `LEVEL` is mapped as follows:
 * `OK` -> 0.0
 * `WARN` -> 1.0
 * `ERROR` -> 2.0
+
+## FAQ
+
+### How do I get a SonarQube token?
+
+Log in into your SonarQube instance and click your user icon in the top right corner. Select "My Account", switch to the
+"Security" tab and generate a new token.
 
 ## Changelog
 
