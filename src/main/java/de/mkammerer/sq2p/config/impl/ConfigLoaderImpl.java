@@ -25,7 +25,8 @@ public class ConfigLoaderImpl implements ConfigLoader {
       new Config.Server(config.getString("server.hostname", "0.0.0.0"), Math.toIntExact(config.getLong("server.port", 8080L)), Math.toIntExact(config.getLong("server.min_threads", 1L)), Math.toIntExact(config.getLong("server.max_threads", 8L))),
       new Config.SonarQube(URI.create(config.getString("sonarqube.url", "http://localhost:9000/")), sonarQubeToken, Duration.parse(config.getString("sonarqube.scrape_interval", "PT1H"))),
       new Config.Prometheus(config.getString("prometheus.metrics_path", "/metrics")),
-      new Config.Projects(Set.copyOf(config.getList("projects.include", List.of())), Set.copyOf(config.getList("projects.exclude", List.of())))
+      new Config.Projects(Set.copyOf(config.getList("projects.include", List.of())), Set.copyOf(config.getList("projects.exclude", List.of()))),
+      new Config.Metrics(Set.copyOf(config.getList("metrics.include", List.of())), Set.copyOf(config.getList("metrics.exclude", List.of())))
     );
   }
 }

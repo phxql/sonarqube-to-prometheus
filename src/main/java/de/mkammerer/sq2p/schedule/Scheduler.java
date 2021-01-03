@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +22,8 @@ public class Scheduler {
   public void run() {
     LOGGER.info("Running ...");
     try {
-      Set<Metric> metrics = sonarQubeService.fetchMetrics();
+      Set<Metric> metrics = filterMetrics(sonarQubeService.fetchMetrics());
+      LOGGER.debug("Metrics to scrape: {}", metrics);
 
       Set<Project> projects = sonarQubeService.fetchProjects();
       for (Project project : projects) {
@@ -44,6 +46,12 @@ public class Scheduler {
     }
   }
 
+  private Set<Metric> filterMetrics(Set<Metric> metrics) {
+    return metrics.stream()
+      .filter(this::isMetricIncluded)
+      .collect(Collectors.toUnmodifiableSet());
+  }
+
   private boolean isProjectIncluded(Project project) {
     Set<String> include = config.getProjects().getInclude();
     Set<String> exclude = config.getProjects().getExclude();
@@ -55,5 +63,18 @@ public class Scheduler {
 
     // Otherwise check the exclude list if the project id is excluded
     return !exclude.contains(project.getId());
+  }
+
+  private boolean isMetricIncluded(Metric metric) {
+    Set<String> include = config.getMetrics().getInclude();
+    Set<String> exclude = config.getMetrics().getExclude();
+
+    // if the include list is non-empty, the metric id has to be in it
+    if (!include.isEmpty()) {
+      return include.contains(metric.getId());
+    }
+
+    // Otherwise check the exclude list if the metric id is excluded
+    return !exclude.contains(metric.getId());
   }
 }

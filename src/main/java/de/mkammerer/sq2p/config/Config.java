@@ -13,6 +13,7 @@ public class Config {
   SonarQube sonarQube;
   Prometheus prometheus;
   Projects projects;
+  Metrics metrics;
 
   @Value
   public static class SonarQube {
@@ -37,6 +38,12 @@ public class Config {
 
   @Value
   public static class Projects {
+    Set<String> include;
+    Set<String> exclude;
+  }
+
+  @Value
+  public static class Metrics {
     Set<String> include;
     Set<String> exclude;
   }

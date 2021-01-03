@@ -15,3 +15,7 @@ metrics_path = "/metrics"
 [projects]
 include = []
 exclude = []
+
+[metrics]
+include = []
+exclude = []
