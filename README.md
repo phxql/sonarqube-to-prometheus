@@ -1,5 +1,7 @@
 # SonarQube to Prometheus
 
+![build](https://github.com/phxql/sonarqube-to-prometheus/workflows/build/badge.svg)
+
 Exports SonarQube metrics to Prometheus.
 
 It scrapes the SonarQube server at a configurable interval and extracts measures for all metrics on all projects on all
