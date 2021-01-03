@@ -92,6 +92,10 @@ The metric type `LEVEL` is mapped as follows:
 * `WARN` -> 1.0
 * `ERROR` -> 2.0
 
+## Changelog
+
+[See here](CHANGELOG.md)
+
 ## License
 
 [AGPLv3](https://www.gnu.org/licenses/agpl-3.0.txt)
