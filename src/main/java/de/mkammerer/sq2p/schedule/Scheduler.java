@@ -1,5 +1,6 @@
 package de.mkammerer.sq2p.schedule;
 
+import de.mkammerer.sq2p.config.Config;
 import de.mkammerer.sq2p.metric.MetricService;
 import de.mkammerer.sq2p.sonarqube.Measure;
 import de.mkammerer.sq2p.sonarqube.Metric;
@@ -15,6 +16,7 @@ import java.util.Set;
 public class Scheduler {
   private final SonarQubeService sonarQubeService;
   private final MetricService metricService;
+  private final Config config;
 
   public void run() {
     LOGGER.info("Running ...");
@@ -23,6 +25,13 @@ public class Scheduler {
 
       Set<Project> projects = sonarQubeService.fetchProjects();
       for (Project project : projects) {
+        if (!isProjectIncluded(project)) {
+          LOGGER.debug("Skipping project '{}'", project.getId());
+          continue;
+        }
+
+        LOGGER.info("Found project '{}' (named '{}')", project.getId(), project.getName());
+
         Set<Measure> measures = sonarQubeService.fetchMeasure(project, metrics);
         for (Measure measure : measures) {
           metricService.updateMeasure(measure);
@@ -33,5 +42,18 @@ public class Scheduler {
     } finally {
       LOGGER.info("Done");
     }
+  }
+
+  private boolean isProjectIncluded(Project project) {
+    Set<String> include = config.getProjects().getInclude();
+    Set<String> exclude = config.getProjects().getExclude();
+
+    // if the include list is non-empty, the project id has to be in it
+    if (!include.isEmpty()) {
+      return include.contains(project.getId());
+    }
+
+    // Otherwise check the exclude list if the project id is excluded
+    return !exclude.contains(project.getId());
   }
 }

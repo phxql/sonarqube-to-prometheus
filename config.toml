@@ -11,3 +11,7 @@ scrape_interval = "PT1H"
 
 [prometheus]
 metrics_path = "/metrics"
+
+[projects]
+include = []
+exclude = []

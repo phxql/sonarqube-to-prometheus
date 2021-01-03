@@ -42,7 +42,17 @@ public enum MetricType {
   },
   BOOL,
   STRING,
-  MILLISEC,
+  MILLISEC {
+    @Override
+    public boolean isSupported() {
+      return true;
+    }
+
+    @Override
+    public double parseValue(JsonNode node) {
+      return DoubleParser.parse(node);
+    }
+  },
   DATA,
   LEVEL {
     @Override

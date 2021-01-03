@@ -7,7 +7,7 @@ It scrapes the SonarQube server at a configurable interval and extracts measures
 ## Running
 
 ```shell
-java -Xmx128M -jar sonarqube-to-prometheus-*.jar
+java -XX:+UseSerialGC -Xms16M -Xmx128M -jar sonarqube-to-prometheus-*.jar
 ```
 
 To quit, press `Ctrl+C`.
@@ -41,7 +41,37 @@ scrape_interval = "PT1H" # How often should SonarQube be scraped? PT1M is 1 minu
 
 [prometheus]
 metrics_path = "/metrics" # URL to publish prometheus metrics
+
+[projects]
+include = []
+exclude = []
 ```
+
+### Including / excluding
+
+If the include list is non-empty, the project id / metric has to be in the list to be included.
+
+Otherwise the exclude list is checked for the project id / metric.
+
+Example:
+
+```toml
+[projects]
+include = ["your.project:id"]
+exclude = []
+```
+
+Only the project `your.project:id` will be scraped from SonarQube, all others are ignored.
+
+Another example:
+
+```toml
+[projects]
+include = []
+exclude = ["your.project:id"]
+```
+
+All projects will be scraped, except the project `your.project:id`.
 
 ## Metric mapping
 

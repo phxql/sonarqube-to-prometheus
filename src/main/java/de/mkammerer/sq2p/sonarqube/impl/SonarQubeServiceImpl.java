@@ -51,7 +51,7 @@ public class SonarQubeServiceImpl implements SonarQubeService {
 
   @Override
   public Set<Measure> fetchMeasure(Project project, Set<Metric> metrics) throws SonarQubeException {
-    LOGGER.info("Fetching measures for project {} and {} metrics ...", project.getName(), metrics.size());
+    LOGGER.info("Fetching measures for project {} and {} metrics ...", project.getId(), metrics.size());
 
     Set<Measure> measures;
     try {

@@ -65,7 +65,7 @@ public class Main {
   }
 
   private void setupScheduler(ScheduledExecutorService executorService, Config config, SonarQubeService sonarQube, MetricService metricService) {
-    Scheduler scheduler = new Scheduler(sonarQube, metricService);
+    Scheduler scheduler = new Scheduler(sonarQube, metricService, config);
 
     executorService.scheduleWithFixedDelay(scheduler::run, 0, config.getSonarQube().getScrapeInterval().toSeconds(), TimeUnit.SECONDS);
   }
