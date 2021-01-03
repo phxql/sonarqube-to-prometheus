@@ -37,6 +37,11 @@ public class Scheduler {
 
         Set<Branch> branches = sonarQubeService.fetchBranches(project);
         for (Branch branch : branches) {
+          if (!isBranchIncluded(branch)) {
+            LOGGER.debug("Skipping branch '{}'", branch.getId());
+            continue;
+          }
+
           LOGGER.info("Found branch '{}', last analysis: {}", branch.getId(), branch.getLastAnalysis());
 
           Set<Measure> measures = sonarQubeService.fetchMeasure(project, branch, metrics);
@@ -82,5 +87,18 @@ public class Scheduler {
 
     // Otherwise check the exclude list if the metric id is excluded
     return !exclude.contains(metric.getId());
+  }
+
+  private boolean isBranchIncluded(Branch branch) {
+    Set<String> include = config.getBranches().getInclude();
+    Set<String> exclude = config.getBranches().getExclude();
+
+    // if the include list is non-empty, the branch id has to be in it
+    if (!include.isEmpty()) {
+      return include.contains(branch.getId());
+    }
+
+    // Otherwise check the exclude list if the branch id is excluded
+    return !exclude.contains(branch.getId());
   }
 }

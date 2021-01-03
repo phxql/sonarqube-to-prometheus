@@ -44,8 +44,16 @@ scrape_interval = "PT1H" # How often should SonarQube be scraped? PT1M is 1 minu
 metrics_path = "/metrics" # URL to publish prometheus metrics
 
 [projects]
-include = []
-exclude = []
+include = [] # Project ids to include
+exclude = [] # Project ids to exclude
+
+[metrics]
+include = [] # Metrics to include
+exclude = [] # Metrics to exclude
+
+[branches]
+include = [] # Branches to include
+exclude = [] # Branches to exclude
 ```
 
 ### Including / excluding

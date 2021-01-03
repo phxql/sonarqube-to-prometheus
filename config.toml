@@ -19,3 +19,7 @@ exclude = []
 [metrics]
 include = []
 exclude = []
+
+[branches]
+include = []
+exclude = []
