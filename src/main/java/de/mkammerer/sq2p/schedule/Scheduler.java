@@ -2,6 +2,7 @@ package de.mkammerer.sq2p.schedule;
 
 import de.mkammerer.sq2p.config.Config;
 import de.mkammerer.sq2p.metric.MetricService;
+import de.mkammerer.sq2p.sonarqube.Branch;
 import de.mkammerer.sq2p.sonarqube.Measure;
 import de.mkammerer.sq2p.sonarqube.Metric;
 import de.mkammerer.sq2p.sonarqube.Project;
@@ -34,9 +35,14 @@ public class Scheduler {
 
         LOGGER.info("Found project '{}' (named '{}')", project.getId(), project.getName());
 
-        Set<Measure> measures = sonarQubeService.fetchMeasure(project, metrics);
-        for (Measure measure : measures) {
-          metricService.updateMeasure(measure);
+        Set<Branch> branches = sonarQubeService.fetchBranches(project);
+        for (Branch branch : branches) {
+          LOGGER.info("Found branch '{}', last analysis: {}", branch.getId(), branch.getLastAnalysis());
+
+          Set<Measure> measures = sonarQubeService.fetchMeasure(project, branch, metrics);
+          for (Measure measure : measures) {
+            metricService.updateMeasure(measure);
+          }
         }
       }
     } catch (Exception e) {

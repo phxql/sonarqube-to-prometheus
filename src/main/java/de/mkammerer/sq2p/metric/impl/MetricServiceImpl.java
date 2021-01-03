@@ -61,16 +61,18 @@ public class MetricServiceImpl implements MetricService {
   @Value
   private static class MeasureKey {
     String projectId;
+    String branchId;
     String metricId;
     MetricType metricType;
 
     public static MeasureKey of(Measure measure) {
-      return new MeasureKey(measure.getProject().getId(), measure.getMetric().getId(), measure.getMetric().getType());
+      return new MeasureKey(measure.getProject().getId(), measure.getBranch().getId(), measure.getMetric().getId(), measure.getMetric().getType());
     }
 
     public Tags getTags() {
       return Tags.of(
         "project", projectId,
+        "branch", branchId,
         "metricType", metricType.toString()
       );
     }

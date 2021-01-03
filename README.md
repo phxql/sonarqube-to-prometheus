@@ -2,7 +2,8 @@
 
 Exports SonarQube metrics to Prometheus.
 
-It scrapes the SonarQube server at a configurable interval and extracts measures for all metrics on all projects.
+It scrapes the SonarQube server at a configurable interval and extracts measures for all metrics on all projects on all
+branches.
 
 ## Running
 

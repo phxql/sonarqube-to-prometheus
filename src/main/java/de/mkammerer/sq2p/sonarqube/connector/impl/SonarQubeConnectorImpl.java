@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import de.mkammerer.sq2p.config.Config;
 import de.mkammerer.sq2p.infrastructure.http.BasicAuth;
 import de.mkammerer.sq2p.infrastructure.http.HttpClient;
+import de.mkammerer.sq2p.sonarqube.Branch;
 import de.mkammerer.sq2p.sonarqube.Measure;
 import de.mkammerer.sq2p.sonarqube.Metric;
 import de.mkammerer.sq2p.sonarqube.MetricType;
 import de.mkammerer.sq2p.sonarqube.Project;
 import de.mkammerer.sq2p.sonarqube.connector.SonarQubeConnector;
+import de.mkammerer.sq2p.sonarqube.connector.impl.dto.BranchesDto;
 import de.mkammerer.sq2p.sonarqube.connector.impl.dto.MeasuresDto;
 import de.mkammerer.sq2p.sonarqube.connector.impl.dto.MetricsDto;
 import de.mkammerer.sq2p.sonarqube.connector.impl.dto.ProjectsDto;
@@ -66,14 +68,34 @@ public class SonarQubeConnectorImpl implements SonarQubeConnector {
   }
 
   @Override
-  public Set<Measure> fetchMeasures(Project project, Set<Metric> metrics) throws SonarQubeConnectorException {
+  public Set<Branch> fetchBranches(Project project) throws SonarQubeConnectorException {
+    URI url = httpClient.combineUrl(config.getUrl().toString(), String.format(
+      "/api/project_branches/list?project=%s",
+      httpClient.encodeQueryParameter(project.getId())
+    ));
+
+    BranchesDto branches;
+    try {
+      branches = httpClient.get(BasicAuth.ofToken(config.getToken()), url, BranchesDto.class);
+    } catch (IOException e) {
+      throw new SonarQubeConnectorException(String.format("Failed to fetch branches from %s", url), e);
+    }
+
+    return branches.getBranches().stream()
+      .map(BranchesDto.BranchDto::toBranch)
+      .collect(Collectors.toUnmodifiableSet());
+  }
+
+  @Override
+  public Set<Measure> fetchMeasures(Project project, Branch branch, Set<Metric> metrics) throws SonarQubeConnectorException {
     String metricsValue = metrics.stream().map(Metric::getId).collect(Collectors.joining(","));
 
     URI url = httpClient.combineUrl(config.getUrl().toString(), String.format(
-      "/api/measures/component?component=%s&metricKeys=%s",
+      "/api/measures/component?component=%s&branch=%s&metricKeys=%s",
       httpClient.encodeQueryParameter(project.getId()),
-      httpClient.encodeQueryParameter(metricsValue))
-    );
+      httpClient.encodeQueryParameter(branch.getId()),
+      httpClient.encodeQueryParameter(metricsValue)
+    ));
 
     MeasuresDto measures;
     try {
@@ -103,7 +125,7 @@ public class SonarQubeConnectorImpl implements SonarQubeConnector {
       double value = metric.getType().parseValue(measure);
 
       LOGGER.debug("Mapped {} -> {}", metric.getId(), value);
-      result.add(new Measure(project, metric, value));
+      result.add(new Measure(project, branch, metric, value));
     }
 
     return result;

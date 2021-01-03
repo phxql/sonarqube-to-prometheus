@@ -1,5 +1,6 @@
 package de.mkammerer.sq2p.sonarqube.connector;
 
+import de.mkammerer.sq2p.sonarqube.Branch;
 import de.mkammerer.sq2p.sonarqube.Measure;
 import de.mkammerer.sq2p.sonarqube.Metric;
 import de.mkammerer.sq2p.sonarqube.Project;
@@ -12,5 +13,7 @@ public interface SonarQubeConnector {
 
   Set<Metric> fetchMetrics() throws SonarQubeConnectorException;
 
-  Set<Measure> fetchMeasures(Project project, Set<Metric> metrics) throws SonarQubeConnectorException;
+  Set<Measure> fetchMeasures(Project project, Branch branch, Set<Metric> metrics) throws SonarQubeConnectorException;
+
+  Set<Branch> fetchBranches(Project project) throws SonarQubeConnectorException;
 }

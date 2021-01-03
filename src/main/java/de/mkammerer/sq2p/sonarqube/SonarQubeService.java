@@ -7,5 +7,7 @@ public interface SonarQubeService {
 
   Set<Metric> fetchMetrics() throws SonarQubeException;
 
-  Set<Measure> fetchMeasure(Project project, Set<Metric> metrics) throws SonarQubeException;
+  Set<Measure> fetchMeasure(Project project, Branch branch, Set<Metric> metrics) throws SonarQubeException;
+
+  Set<Branch> fetchBranches(Project project) throws SonarQubeException;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProjectsDto {
   @JsonProperty("components")
-  List<ComponentsDto> components;
+  private List<ComponentsDto> components;
 
   @Data
   @AllArgsConstructor
